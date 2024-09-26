@@ -1,7 +1,7 @@
 package com.corndel.exercises;
 
 public class Maths {
-    private static double PI = 3.14;
+    public static double PI = 3.14;
 
     public static double getPI() {
         return PI;
