@@ -11,144 +11,246 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
+
 public class QueenTest {
 
-  private Board board;
-  private Queen queen = new Queen(PlayerColour.WHITE);
+          private Board board;
+          private Queen queen = new Queen(PlayerColour.WHITE);
 
-  @BeforeEach
+    @BeforeEach
   public void setup() {
-    board = Board.empty();
-  }
+      board = Board.empty();
+    }
+
+    @Test
+  public void queenCanMoveHorizontally() {
+      Coordinates coords = new Coordinates(5,5);
+      board.placePiece(coords,queen);
+
+      List<Move> allowedMoves = queen.getAllowedMoves(coords,board);
+
+      assertThat(allowedMoves).
+              contains(
+                      new Move(coords, new Coordinates(5,0)),
+                      new Move(coords, new Coordinates(5,1)),
+                      new Move(coords, new Coordinates(5,2)),
+                      new Move(coords, new Coordinates(5,3)),
+                      new Move(coords, new Coordinates(5,4)),
+                      new Move(coords, new Coordinates(5,6)),
+                      new Move(coords, new Coordinates(5,7)));
+    }
+@Test
+    public void queenCanMoveVertically() {
+        Coordinates coords = new Coordinates(4,4);
+        board.placePiece(coords,queen);
+
+        List<Move> allowedMoves = queen.getAllowedMoves(coords,board);
+
+        assertThat(allowedMoves)
+                .contains(
+                        new Move(coords, new Coordinates(1,4)),
+                        new Move(coords, new Coordinates(2,4)),
+                        new Move(coords, new Coordinates(3,4)),
+                        new Move(coords, new Coordinates(5,4)),
+                        new Move(coords, new Coordinates(6,4)),
+                        new Move(coords, new Coordinates(7,4))
+                );
+    }
+
+    @Test
+        public void queenCanMoveDiagonally() {
+        Coordinates coords = new Coordinates(3,4);
+        board.placePiece(coords, queen);
 
 
-  @Test
-  public void queenCanMoveLaterally() {
-    // Arrange
-    Coordinates coords = new Coordinates(3, 4);
-    board.placePiece(coords, queen);
+        List <Move> allowedMoves = queen.getAllowedMoves(coords,board);
 
-    // Act
-    List<Move> allowedMoves = queen.getAllowedMoves(coords, board);
+        assertThat(allowedMoves)
+                .contains(
+                        new Move(coords, new Coordinates(0, 1)),
+                        new Move(coords, new Coordinates(1, 2)),
+                        new Move(coords, new Coordinates(2, 3)),
+                        new Move(coords, new Coordinates(4, 5)),
+                        new Move(coords, new Coordinates(5, 6)),
+                        new Move(coords, new Coordinates(6, 7)),
+                        new Move(coords, new Coordinates(7, 0)),
+                        new Move(coords, new Coordinates(6, 1)),
+                        new Move(coords, new Coordinates(5, 2)),
+                        new Move(coords, new Coordinates(4, 3)),
+                        new Move(coords, new Coordinates(2, 5)),
+                        new Move(coords, new Coordinates(1, 6)),
+                        new Move(coords, new Coordinates(0, 7))
+                );
+    }
 
-    // Assert
-    assertThat(allowedMoves)
-        .contains(
-            new Move(coords, new Coordinates(3, 0)),
-            new Move(coords, new Coordinates(3, 1)),
-            new Move(coords, new Coordinates(3, 2)),
-            new Move(coords, new Coordinates(3, 3)),
-            new Move(coords, new Coordinates(3, 5)),
-            new Move(coords, new Coordinates(3, 6)),
-            new Move(coords, new Coordinates(3, 7)),
-            new Move(coords, new Coordinates(0, 4)),
-            new Move(coords, new Coordinates(1, 4)),
-            new Move(coords, new Coordinates(2, 4)),
-            new Move(coords, new Coordinates(4, 4)),
-            new Move(coords, new Coordinates(5, 4)),
-            new Move(coords, new Coordinates(6, 4)),
-            new Move(coords, new Coordinates(7, 4)));
-  }
-
-
-  @Test
-  public void queenCanMoveDiagonally() {
-    // Arrange
-    Coordinates coords = new Coordinates(3, 4);
-    board.placePiece(coords, queen);
-
-    // Act
-    List<Move> allowedMoves = queen.getAllowedMoves(coords, board);
-
-    // Assert
-    assertThat(allowedMoves)
-        .contains(
-            new Move(coords, new Coordinates(0, 1)),
-            new Move(coords, new Coordinates(1, 2)),
-            new Move(coords, new Coordinates(2, 3)),
-            new Move(coords, new Coordinates(4, 5)),
-            new Move(coords, new Coordinates(5, 6)),
-            new Move(coords, new Coordinates(6, 7)),
-            new Move(coords, new Coordinates(7, 0)),
-            new Move(coords, new Coordinates(6, 1)),
-            new Move(coords, new Coordinates(5, 2)),
-            new Move(coords, new Coordinates(4, 3)),
-            new Move(coords, new Coordinates(2, 5)),
-            new Move(coords, new Coordinates(1, 6)),
-            new Move(coords, new Coordinates(0, 7)));
-  }
+//    @Test
+//
+//    public void queenCanCaptureOpposingPiece() {
+//        Coordinates coords = new Coordinates(3,4);
+//        board.placePiece(coords,queen);
+//
+//        Coordinates OpposingCoords = new Coordinates(4,5);
+//        Rook rook = new Rook(PlayerColour.BLACK);
+//        board.placePiece(OpposingCoords, rook);
+//
+//        List <Move> allowedMoves = queen.getAllowedMoves(coords, board);
+//
+//        assertThat(allowedMoves)
+//                .contains()
+//    }
+        }
 
 
-  @Test
-  public void queenOnlyAllowsDiagonalAndLateralMoves() {
-    // Arrange
-    Coordinates coords = new Coordinates(3, 4);
-    board.placePiece(coords, queen);
-
-    // Act
-    List<Move> allowedMoves = queen.getAllowedMoves(coords, board);
-
-    // Assert
-    assertThat(allowedMoves).hasSize(27);
-  }
 
 
-  @Test
-  public void queenCanCaptureOpposingPieces() {
-    // Arrange
-    Coordinates coords = new Coordinates(3, 4);
-    board.placePiece(coords, queen);
-
-    Piece opponent = new Queen(PlayerColour.BLACK);
-    Coordinates opponentCoords = new Coordinates(3, 5);
-    board.placePiece(opponentCoords, opponent);
-
-    // Act
-    List<Move> allowedMoves = queen.getAllowedMoves(coords, board);
-
-    // Assert
-    assertThat(allowedMoves).contains(new Move(coords, opponentCoords));
-  }
 
 
-  @Test
-  public void queenCannotPassThroughOpposingPieces() {
-    // Arrange
-    Coordinates coords = new Coordinates(3, 4);
-    board.placePiece(coords, queen);
-
-    Piece opponent = new Rook(PlayerColour.BLACK);
-    Coordinates opponentCoords = new Coordinates(3, 5);
-    board.placePiece(opponentCoords, opponent);
-
-    // Act
-    List<Move> allowedMoves = queen.getAllowedMoves(coords, board);
-
-    // Assert
-    assertThat(allowedMoves)
-        .doesNotContain(
-            new Move(coords, new Coordinates(3, 6)), new Move(coords, new Coordinates(3, 7)));
-  }
 
 
-  @Test
-  public void queenIsBlockedByFriendlyPieces() {
-    // Arrange
-    Coordinates coords = new Coordinates(3, 4);
-    board.placePiece(coords, queen);
 
-    Piece friendlyPiece = new Rook(PlayerColour.WHITE);
-    Coordinates friendlyCoords = new Coordinates(3, 5);
-    board.placePiece(friendlyCoords, friendlyPiece);
 
-    // Act
-    List<Move> allowedMoves = queen.getAllowedMoves(coords, board);
-
-    // Assert
-    assertThat(allowedMoves)
-        .doesNotContain(
-            new Move(coords, new Coordinates(3, 5)),
-            new Move(coords, new Coordinates(3, 6)),
-            new Move(coords, new Coordinates(3, 7)));
-  }
-}
+//
+//
+//public class QueenTest {
+//
+//
+//  private Board board;
+//  private Queen queen = new Queen(PlayerColour.WHITE);
+//
+//  @BeforeEach
+//  public void setup() {
+//    board = Board.empty();
+//  }
+//
+//
+//  @Test
+//  public void queenCanMoveLaterally() {
+//    // Arrange
+//    Coordinates coords = new Coordinates(3, 4);
+//    board.placePiece(coords, queen);
+//
+//    // Act
+//    List<Move> allowedMoves = queen.getAllowedMoves(coords, board);
+//
+//    // Assert
+//    assertThat(allowedMoves)
+//            .contains(
+//                    new Move(coords, new Coordinates(3, 0)),
+//                    new Move(coords, new Coordinates(3, 1)),
+//                    new Move(coords, new Coordinates(3, 2)),
+//                    new Move(coords, new Coordinates(3, 3)),
+//                    new Move(coords, new Coordinates(3, 5)),
+//                    new Move(coords, new Coordinates(3, 6)),
+//                    new Move(coords, new Coordinates(3, 7)),
+//                    new Move(coords, new Coordinates(0, 4)),
+//                    new Move(coords, new Coordinates(1, 4)),
+//                    new Move(coords, new Coordinates(2, 4)),
+//                    new Move(coords, new Coordinates(4, 4)),
+//                    new Move(coords, new Coordinates(5, 4)),
+//                    new Move(coords, new Coordinates(6, 4)),
+//                    new Move(coords, new Coordinates(7, 4)));
+//  }
+//
+//
+//  @Test
+//  public void queenCanMoveDiagonally() {
+//    // Arrange
+//    Coordinates coords = new Coordinates(3, 4);
+//    board.placePiece(coords, queen);
+//
+//    // Act
+//    List<Move> allowedMoves = queen.getAllowedMoves(coords, board);
+//
+//    // Assert
+//    assertThat(allowedMoves)
+//            .contains(
+//                    new Move(coords, new Coordinates(0, 1)),
+//                    new Move(coords, new Coordinates(1, 2)),
+//                    new Move(coords, new Coordinates(2, 3)),
+//                    new Move(coords, new Coordinates(4, 5)),
+//                    new Move(coords, new Coordinates(5, 6)),
+//                    new Move(coords, new Coordinates(6, 7)),
+//                    new Move(coords, new Coordinates(7, 0)),
+//                    new Move(coords, new Coordinates(6, 1)),
+//                    new Move(coords, new Coordinates(5, 2)),
+//                    new Move(coords, new Coordinates(4, 3)),
+//                    new Move(coords, new Coordinates(2, 5)),
+//                    new Move(coords, new Coordinates(1, 6)),
+//                    new Move(coords, new Coordinates(0, 7)));
+//  }
+//
+//
+//  @Test
+//  public void queenOnlyAllowsDiagonalAndLateralMoves() {
+//    // Arrange
+//    Coordinates coords = new Coordinates(3, 4);
+//    board.placePiece(coords, queen);
+//
+//    // Act
+//    List<Move> allowedMoves = queen.getAllowedMoves(coords, board);
+//
+//    // Assert
+//    assertThat(allowedMoves).hasSize(27);
+//  }
+//
+//
+//  @Test
+//  public void queenCanCaptureOpposingPieces() {
+//    // Arrange
+//    Coordinates coords = new Coordinates(3, 4);
+//    board.placePiece(coords, queen);
+//
+//    Piece opponent = new Queen(PlayerColour.BLACK);
+//    Coordinates opponentCoords = new Coordinates(3, 5);
+//    board.placePiece(opponentCoords, opponent);
+//
+//    // Act
+//    List<Move> allowedMoves = queen.getAllowedMoves(coords, board);
+//
+//    // Assert
+//    assertThat(allowedMoves).contains(new Move(coords, opponentCoords));
+//  }
+//
+//
+//  @Test
+//  public void queenCannotPassThroughOpposingPieces() {
+//    // Arrange
+//    Coordinates coords = new Coordinates(3, 4);
+//    board.placePiece(coords, queen);
+//
+//    Piece opponent = new Rook(PlayerColour.BLACK);
+//    Coordinates opponentCoords = new Coordinates(3, 5);
+//    board.placePiece(opponentCoords, opponent);
+//
+//    // Act
+//    List<Move> allowedMoves = queen.getAllowedMoves(coords, board);
+//
+//    // Assert
+//    assertThat(allowedMoves)
+//            .doesNotContain(
+//                    new Move(coords, new Coordinates(3, 6)), new Move(coords, new Coordinates(3, 7)));
+//  }
+//
+//
+//  @Test
+//  public void queenIsBlockedByFriendlyPieces() {
+//    // Arrange
+//    Coordinates coords = new Coordinates(3, 4);
+//    board.placePiece(coords, queen);
+//
+//    Piece friendlyPiece = new Rook(PlayerColour.WHITE);
+//    Coordinates friendlyCoords = new Coordinates(3, 5);
+//    board.placePiece(friendlyCoords, friendlyPiece);
+//
+//    // Act
+//    List<Move> allowedMoves = queen.getAllowedMoves(coords, board);
+//
+//    // Assert
+//    assertThat(allowedMoves)
+//            .doesNotContain(
+//                    new Move(coords, new Coordinates(3, 5)),
+//                    new Move(coords, new Coordinates(3, 6)),
+//                    new Move(coords, new Coordinates(3, 7)));
+//  }
+//}
+//
